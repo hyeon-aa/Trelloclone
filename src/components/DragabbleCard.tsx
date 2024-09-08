@@ -14,7 +14,11 @@ const DragabbleCard = ({ todoId, todoText, index }) => {
         <>
             <Draggable key={todoId} draggableId={todoId + ""} index={index}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>{todoText}</div>
+                    <>
+                        <div ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}>{todoText}</div>
+                    </>
                 )
                 }
             </Draggable>

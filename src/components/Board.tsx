@@ -11,17 +11,19 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 // }
 
 const Board = ({ todos, boardId }) => {
-    const { register, handleSubmit, setValue, formState: { errors }, } = useForm()
+    const { register, handleSubmit, setValue } = useForm()
+
 
     const setTodos = useSetRecoilState(todoState)
     const onValid = ({ todo }) => {
         const newTodo = { id: Date.now(), text: todo }
         setTodos((allBoards) => {
+            // console.log([...allBoards[boardId]])
             return {
                 ...allBoards,
                 [boardId]: [
                     newTodo,
-                    ...allBoards[boardId]
+                    ...(allBoards[boardId] || [])  //기본값을 빈 배열로 설정
 
                 ]
             }
@@ -40,13 +42,19 @@ const Board = ({ todos, boardId }) => {
             <Droppable droppableId={boardId}>
                 {
                     (provided) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps}>
-                            {todos.map((todo, index) => (
-                                <DragabbleCard todoId={todo.id} todoText={todo.text} index={index} key={todo.id}></DragabbleCard>
-                            ))}
-                            {provided.placeholder}
-                        </div>
+                        <>
+                            <div ref={provided.innerRef} {...provided.droppableProps}>
+                                {todos?.map((todo, index) => (
+                                    <DragabbleCard todoId={todo.id}
+                                        todoText={todo.text}
+                                        index={index}
+                                        key={todo.id}></DragabbleCard>
+                                ))}
+                                {provided.placeholder}
+                            </div>
+                        </>
                     )
+
                 }
             </Droppable>
         </>
