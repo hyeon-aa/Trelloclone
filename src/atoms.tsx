@@ -10,11 +10,13 @@ interface ITodoState {
     [key: string]: string[]
 }
 
-export const todoState = atom<ITodoState>({
+export const todoState = atom({
     key: "todo",
     default: {
-        todo: [],
+        plan: [],
         doing: [],
         done: []
     }
 })
+
+// { id: 1, text: "hello" }
