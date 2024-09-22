@@ -2,31 +2,47 @@ import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea
 import { useRef } from "react";
 import DragabbleCard from "./DragabbleCard";
 import { useForm, SubmitHandler } from "react-hook-form"
+import { todoState } from "../atoms";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
-interface IBoardProps {
-    todos: string[],
-    boardId: string
-}
+// interface IBoardProps {
+//     todos: string[],
+//     boardId: string
+// }
 
-const Board = ({ todos, boardId }: IBoardProps) => {
-    const { register, handleSubmit, watch, formState: { errors }, } = useForm()
-    const onValid = (data) => {
+const Board = ({ todos, boardId }) => {
+    const { register, handleSubmit, setValue, formState: { errors }, } = useForm()
 
+    const setTodos = useSetRecoilState(todoState)
+    const onValid = ({ todo }) => {
+        const newTodo = { id: Date.now(), text: todo }
+        setTodos((allBoards) => {
+            return {
+                ...allBoards,
+                [boardId]: [
+                    newTodo,
+                    ...allBoards[boardId]
+
+                ]
+            }
+        }
+        )
+        setValue("todo", '')
     }
+
 
     return (
         <>
             <h2>{boardId}</h2>
             <form onSubmit={handleSubmit(onValid)}>
-                <input {...register(`${boardId}`)}></input>
-                {/* <button onClick={onClick}>clickme</button> */}
+                <input {...register("todo")}></input>
             </form>
             <Droppable droppableId={boardId}>
                 {
                     (provided) => (
                         <div ref={provided.innerRef} {...provided.droppableProps}>
                             {todos.map((todo, index) => (
-                                <DragabbleCard todo={todo} index={index} key={index}></DragabbleCard>
+                                <DragabbleCard todoId={todo.id} todoText={todo.text} index={index} key={todo.id}></DragabbleCard>
                             ))}
                             {provided.placeholder}
                         </div>

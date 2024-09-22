@@ -1,20 +1,20 @@
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import React from "react";
 
-interface IDraggableCardProps {
-    todo: string,
-    index: number
-}
+// interface IDraggableCardProps {
+//     todo: string,
+//     index: number
+// }
 
 
-const DragabbleCard = ({ todo, index }: IDraggableCardProps) => {
+const DragabbleCard = ({ todoId, todoText, index }) => {
     // console.log(todo + "has been rendered")
 
     return (
         <>
-            <Draggable key={todo} draggableId={todo} index={index}>
+            <Draggable key={todoId} draggableId={todoId + ""} index={index}>
                 {(provided) => (
-                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>{todo}</div>
+                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>{todoText}</div>
                 )
                 }
             </Draggable>
